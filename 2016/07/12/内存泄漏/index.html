@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>内存泄漏 | QTKing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="##定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
+##原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存泄漏">
+<meta property="og:url" content="http://www.qtking.com/2016/07/12/内存泄漏/index.html">
+<meta property="og:site_name" content="QTKing">
+<meta property="og:description" content="##定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
+##原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
+<meta property="og:updated_time" content="2016-07-13T15:28:47.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内存泄漏">
+<meta name="twitter:description" content="##定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
+##原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/img/b.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Zhan Jun</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">QTK电子竞技俱乐部创始人</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>About</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/categories/Android">Android</a></li>
+				        
+							<li><a href="/categories/QTK">QTK ESC</a></li>
+				        
+							<li><a href="/categories/life">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="http://www.zhihu.com" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的花火… QTK电子竞技俱乐部创始人</div>
+				</section>
+				
+			</div>
+			
+		</div>
+		
+
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Zhan Jun</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/img/b.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Zhan Jun</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">QTK电子竞技俱乐部创始人</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/categories/Android">Android</a></li>
+		        
+					<li><a href="/categories/QTK">QTK ESC</a></li>
+		        
+					<li><a href="/categories/life">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-内存泄漏" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/12/内存泄漏/" class="article-date">
+  	<time datetime="2016-07-12T07:56:43.120Z" itemprop="datePublished">2016-07-12</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      内存泄漏
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Android/">Android</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##定义<br>内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。</p>
+<p>##原因<br>长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，<br>这就是<code>java</code>中内存泄露的发生场景。</p>
+<a id="more"></a>
+<p>##危害     </p>
+<p>只有一个，那就是虚拟机占用内存过高，导致<code>OOM</code>(内存溢出)。<br>对于<code>Android</code>应用来说，就是你的用户打开一个<code>Activity</code>，使用完之后关闭它，内存泄露；又打开，又关闭，又泄露；几次之后，程序占用内存超过系统限制就会出现<code>FC</code>。             </p>
+<p>先来说一下<code>Java</code>程序运行时的内存分配策略:        </p>
+<ul>
+<li>静态内存:存放静态数据，这块内存是在编译时就已经分配好的，在程序整个运行期间都存在。</li>
+<li>栈内存:程序执行时，局部变量的创建存储区，执行结束后将自动释放。(当时学习java时花的内存分配图，现在都生疏了- -!)</li>
+<li>堆内存:存储一些new出来的内存，也叫动态内存分配，这部分内存在不使用时将会有<code>Java</code>垃圾回收器来负责回收。    </li>
+</ul>
+<p>举一个典型的内存泄漏的例子:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Vector v = <span class="keyword">new</span> Vector(<span class="number">100</span>);</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">100</span>,; i++) &#123;</div><div class="line">	Object o = <span class="keyword">new</span> Object();</div><div class="line">	v.add(o);</div><div class="line">	o = <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在这个例子中，我们循环申请了<code>Object</code>对象，并将所申请的对象放入一个集合中，如果我们仅仅释放引用本身，那么<code>Vector</code>仍然引用<br>该对象，所以这个对象对<code>GC</code>来说是不可回收的。因此，如果对象假如<code>Vector</code>后，还必须从<code>Vector</code>中删除，最简单的方法就是将<br><code>Vector</code>对象设置为<code>null</code>.<br>​<br><code>Java</code>和<code>C++</code>一个很大的区别就是<code>Java</code>有垃圾回收<code>GC(Garbage Collection)</code>自动管理内存的回收。但是我们在实际的项目中仍然会遇到内存泄露的问题。<br><code>Java</code>中对内存对象得访问是通过引用的方式，通过一个内存对象的引用变量来访问到对应的内存地址中的对象。<br><code>GC</code>会从代码栈的引用变量开始追踪，从而判断哪些内存是正在使用，如果无法跟踪到某一块堆内存，那么<code>GC</code>就认为这块内存不再使用了。</p>
+<p><code>Android</code>手机给应用分配的内存通常是8兆左右，如果处理内存处理不当很容易造成<code>OutOfMemoryError</code><br><code>OutOfMemoryError</code>主要由以下几种情况造成： </p>
+<ol>
+<li><p>数据库<code>Cursor</code>没关。<br> 当我们操作完数据库后，一定要调用<code>close()</code>释放资源。 </p>
+</li>
+<li><p>构造<code>Adapter</code>没有使用缓存<code>ContentView</code>。    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span>  </div><div class="line"><span class="function"><span class="keyword">public</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, View convertView, ViewGroup parent)</span> </span>&#123;  </div><div class="line">    ViewHolder vHolder = <span class="keyword">null</span>;  </div><div class="line">    <span class="comment">//如果convertView对象为空则创建新对象，不为空则复用  </span></div><div class="line">    <span class="keyword">if</span> (convertView == <span class="keyword">null</span>) &#123;  </div><div class="line">        convertView = inflater.inflate(..., <span class="keyword">null</span>);  </div><div class="line">        <span class="comment">// 创建 ViewHodler 对象  </span></div><div class="line">        vHolder = <span class="keyword">new</span> ViewHolder();  </div><div class="line">        vHolder.img= (ImageView) convertView.findViewById(...);  </div><div class="line">        vHolder.tv= (TextView) convertView  </div><div class="line">                .findViewById(...);  </div><div class="line">        <span class="comment">// 将ViewHodler保存到Tag中  </span></div><div class="line">        convertView.setTag(vHolder);  </div><div class="line">    &#125; <span class="keyword">else</span> &#123;  </div><div class="line">        <span class="comment">//当convertView不为空时，通过getTag()得到View  </span></div><div class="line">        vHolder = (ViewHolder) convertView.getTag();  </div><div class="line">    &#125;  </div><div class="line">    <span class="comment">// 给对象赋值，修改显示的值  </span></div><div class="line">    vHolder.img.setImageBitmap(...);  </div><div class="line">    vHolder.tv.setText(...);  </div><div class="line">    <span class="keyword">return</span> convertView;  </div><div class="line">&#125;  </div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewHolder</span> </span>&#123;  </div><div class="line">    TextView tv;  </div><div class="line">    ImageView img;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>未取消注册广播接收者<br> <code>registerReceiver()</code>和<code>unregisterReceiver()</code>要成对出现，通常需要在<code>Activity</code>的<code>onDestory()</code>方法去取消注册广播接收者。</p>
+</li>
+<li><p><code>IO</code>流未关闭<br> 注意用完后及时关闭</p>
+</li>
+<li><p><code>Bitmap</code>使用后未调用<code>recycle()</code>。 </p>
+</li>
+<li><p><code>Context</code>泄漏<br> 这是一个很隐晦的<code>OutOfMemoryError</code>的情况。先看一个Android官网提供的例子： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> Drawable sBackground;  </div><div class="line"><span class="meta">@Override</span>  </div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle state)</span> </span>&#123;  </div><div class="line">	<span class="keyword">super</span>.onCreate(state);  </div><div class="line">	TextView label = <span class="keyword">new</span> TextView(<span class="keyword">this</span>);  </div><div class="line">	label.setText(<span class="string">"Leaks are bad"</span>);  </div><div class="line">	<span class="keyword">if</span> (sBackground == <span class="keyword">null</span>) &#123;  </div><div class="line">		sBackground = getDrawable(R.drawable.large_bitmap);  </div><div class="line">	&#125;  </div><div class="line">	label.setBackgroundDrawable(sBackground);  </div><div class="line">	setContentView(label);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 这段代码效率很快，但同时又是极其错误的：<br>我们看一下<code>setBackgroundDrawable(Drawable background)</code>的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBackgroundDrawable</span><span class="params">(Drawable background)</span> </span>&#123;</div><div class="line">...</div><div class="line">background.setCallback(<span class="keyword">this</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有<code>background.setCallback(this);</code>方法，也就是说<code>Drawable</code>拥有<code>TextView</code>的引用，而<code>TextView</code>又拥有<code>Activity</code><em>(Context类型)</em>的引用，<br>因为<code>sBackground</code>为<code>static</code>的，即使<code>Activity</code>被销毁，但是<code>sBackground</code>的生命周期还没走完，所以内存仍然不会被释放。这样就会有内存泄露了。<br>对，这样想是对的，但是我们看一下<code>setCallback</code>的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setCallback</span><span class="params">(Callback cb)</span> </span>&#123;</div><div class="line">    mCallback = <span class="keyword">new</span> WeakReference&lt;Callback&gt;(cb);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们会发现里面使用了<code>WeakReference</code>，所以不会存在内存泄露了，但是官网当时提供的例子明明说有泄露，这是因为在3.0之后，<br>修复了这个内存泄露的问题，在3.0之前<code>setCallback</code>，方法是没有使用<code>WeakReference</code>的，所以这种泄露的情况在3.0之前会发生，3.0之后已经被修复。</p>
+</li>
+<li><p>线程<br> 线程也是造成内存泄露的一个重要的源头。线程产生内存泄露的主要原因在于线程生命周期的不可控。我们来考虑下面一段代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;     </div><div class="line">	<span class="meta">@Override</span>     </div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;         </div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);         </div><div class="line">		setContentView(R.layout.main);         </div><div class="line">		<span class="keyword">new</span> MyThread().start();     </div><div class="line">	&#125;       </div><div class="line">	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;         </div><div class="line">	<span class="meta">@Override</span>         </div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;             </div><div class="line">		<span class="keyword">super</span>.run();             </div><div class="line">		<span class="comment">//耗时的操作       </span></div><div class="line">		&#125;     </div><div class="line">	&#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 假设<code>MyThread</code>的<code>run</code>函数是一个很费时的操作，当调用<code>finish</code>的时候<code>Activity</code>会销毁掉吗？<br> 事实上由于我们的线程是<code>Activity</code>的内部类，所以<code>MyThread</code>中保存了<code>Activity</code>的一个引用，当<code>MyThread</code>的<code>run</code>函数没有结束时，<code>MyThread</code>是不会被销毁的，<br>因此它所引用的<code>Activity</code>也不会被销毁，因此就出现了内存泄露的问题。</p>
+</li>
+<li><p>单例造成的内存泄漏<br>  由于单例的静态特性使得其生命周期跟应用的生命周期一样长，所以如果使用不恰当的话，很容易造成内存泄漏，比如:      </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppManager</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> AppManager instance;</div><div class="line">	<span class="keyword">private</span> Context context;</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="title">AppManager</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.context = context;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> AppManager <span class="title">getInstance</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (instance != <span class="keyword">null</span>) &#123;</div><div class="line">			instance = <span class="keyword">new</span> AppManager(context);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> instance;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里如果传入的是<code>Activity</code>的<code>Context</code>，当该<code>Context</code>的<code>Activity</code>退出后，由于其被单例对象引用，所以会导致<code>Activity</code>无法被回收，就造成内存泄漏。</p>
+</li>
+<li><p>尽量使用<code>ApplicationContext</code><br><strong><code>Context</code>引用的生命周期超过它本身的生命周期，也会导致<code>Context</code>泄漏</strong>。<br>所以如果打算保存一个长时间的对象时尽量使用<code>Application</code>这种<code>Context</code>类型。<br>例如: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mStorageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);</div><div class="line">改成：</div><div class="line">mStorageManager = (StorageManager) getApplicationContext().getSystemService(Context.STORAGE_SERVICE);</div></pre></td></tr></table></figure>
+<p>按道理来说这种系统服务是不会有问题，但是有些厂商在修改的时候，可能会导致<code>Context</code>无法被及时释放。</p>
+</li>
+<li><p>Handler的使用,在Activity退出的时候注意移除(尤其是循环的时候)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadDemo</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;  </div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"ThreadDemo"</span>;  </div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> count = <span class="number">0</span>;  </div><div class="line">	<span class="keyword">private</span> Handler mHandler =  <span class="keyword">new</span> Handler();  </div><div class="line">	  </div><div class="line">	<span class="keyword">private</span> Runnable mRunnable = <span class="keyword">new</span> Runnable() &#123;  </div><div class="line">		  </div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </div><div class="line">			<span class="comment">//为了方便 查看，我们用Log打印出来   </span></div><div class="line">			Log.e(TAG, Thread.currentThread().getName() + <span class="string">" "</span> +count);    </div><div class="line">			<span class="comment">//每2秒执行一次   </span></div><div class="line">			mHandler.postDelayed(mRunnable, <span class="number">2000</span>);  </div><div class="line">		&#125;   </div><div class="line">	&#125;;  </div><div class="line">	<span class="meta">@Override</span>  </div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;  </div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);  </div><div class="line">		setContentView(R.layout.main);   </div><div class="line">		<span class="comment">//通过Handler启动线程   </span></div><div class="line">		mHandler.post(mRunnable);  </div><div class="line">	&#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样在也会引发内存泄露。我们应该在<code>onDestory</code>方法中移除<code>Handler</code>,代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span>  </div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;  </div><div class="line">	<span class="keyword">super</span>.onDestroy();  </div><div class="line">	mHandler.removeCallbacks(mRunnable);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>由上面的<code>Handler</code>可以引伸出来的匿名内部类、非静态内部类和异步现成导致的内存泄漏。<br>下面看一个非静态内部类创建静态实例导致的内存泄漏</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> TestResource mResource = <span class="keyword">null</span>;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">		setContentView(R.layout.activity_main);</div><div class="line">		<span class="keyword">if</span>(mManager == <span class="keyword">null</span>)&#123;</div><div class="line">			mManager = <span class="keyword">new</span> TestResource();</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//...</span></div><div class="line">	&#125;</div><div class="line">	<span class="class"><span class="keyword">class</span> <span class="title">TestResource</span> </span>&#123;</div><div class="line">		<span class="comment">//...</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为非静态内部类默认会持有外部类的引用，而该非静态内部类又创建了一个静态实例，该实例的声明周期与应用的一样长，<br>这就导致了静态实例一直会持有<code>Activity</code>的引用而造成内存泄漏。<br>下面再看一个匿名内部类和异步现成的现象:        </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">	...</div><div class="line">	Runnable ref1 = <span class="keyword">new</span> MyRunable();</div><div class="line">	Runnable ref2 = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">	...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的离职中<code>ref1</code>对象是没问题的，但是<code>ref2</code>这个匿名类的实现对象中有外部类的引用，如果此时线程的生命周期与<code>Activity</code>的不一致时就会造成了泄漏。</p>
+</li>
+<li><p>集合类泄漏<br>集合类中如果只有添加元素的方法，而没有相应的删除机制，导致内存被占用。如果这个集合类是全局性的变量(比如类中的静态属性)，那么没有<br>响应的删除机制，很可能导致集合所占用的内存只增不减。</p>
+</li>
+</ol>
+<p>总结一下避免<code>Contex</code>t泄漏应该注意的问题：        </p>
+<ul>
+<li>使用<code>getApplicationContext()</code>类型。 </li>
+<li>注意对<code>Context</code>的引用不要超过它本身的生命周期。 </li>
+<li>慎重的使用<code>static</code>关键字。 </li>
+<li><code>Activity</code>里如果有线程或<code>Handler</code>时，一定要在<code>onDestroy()</code>里及时停掉。 </li>
+</ul>
+<hr>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/13/QTK精神/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          QTK精神
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="内存泄漏" data-title="内存泄漏" data-url="http://www.qtking.com/2016/07/12/内存泄漏/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Zhan Jun
+    	</div>
+		<div>
+			<span id="busuanzi_container_site_pv">
+				本站总访问量<span id="busuanzi_value_site_pv"></span>次
+			</span>
+
+		</div>
+		<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+	
+
+  </div>
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
