@@ -90,19 +90,19 @@
 
 
 
-<meta name="description" content="##定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
-##原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
+<meta name="description" content="定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
+原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="内存泄漏">
 <meta property="og:url" content="http://www.qtking.com/2016/07/12/内存泄漏/index.html">
 <meta property="og:site_name" content="QTK电子竞技俱乐部">
-<meta property="og:description" content="##定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
-##原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
-<meta property="og:updated_time" content="2016-07-13T15:28:47.779Z">
+<meta property="og:description" content="定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
+原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
+<meta property="og:updated_time" content="2016-07-21T15:50:20.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内存泄漏">
-<meta name="twitter:description" content="##定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
-##原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
+<meta name="twitter:description" content="定义内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。
+原因长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。">
 
 
 
@@ -380,11 +380,9 @@
       
 
       
-        <p>##定义<br>内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。</p>
-<p>##原因<br>长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，<br>这就是<code>java</code>中内存泄露的发生场景。</p>
-<a id="more"></a>
-<p>##危害     </p>
-<p>只有一个，那就是虚拟机占用内存过高，导致<code>OOM</code>(内存溢出)。<br>对于<code>Android</code>应用来说，就是你的用户打开一个<code>Activity</code>，使用完之后关闭它，内存泄露；又打开，又关闭，又泄露；几次之后，程序占用内存超过系统限制就会出现<code>FC</code>。             </p>
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>内存泄露是指无用对象(不再使用的对象)持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，<br>这就是<code>java</code>中内存泄露的发生场景。<br><a id="more"></a></p>
+<h2 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h2><p>只有一个，那就是虚拟机占用内存过高，导致<code>OOM</code>(内存溢出)。<br>对于<code>Android</code>应用来说，就是你的用户打开一个<code>Activity</code>，使用完之后关闭它，内存泄露；又打开，又关闭，又泄露；几次之后，程序占用内存超过系统限制就会出现<code>FC</code>。             </p>
 <p>先来说一下<code>Java</code>程序运行时的内存分配策略:        </p>
 <ul>
 <li>静态内存:存放静态数据，这块内存是在编译时就已经分配好的，在程序整个运行期间都存在。</li>
@@ -649,7 +647,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#危害"><span class="nav-number">3.</span> <span class="nav-text">危害</span></a></li></ol></div>
             
           </div>
         </section>
