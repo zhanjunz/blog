@@ -384,6 +384,24 @@
       
         
           <p>由于服务器端返回的数据量可能很大，<code>Android</code>客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以<code>listview</code>作为载体显示，当将<code>listview</code>下滑到底的时候自动发起新的请求，再加载新的数据。</p>
+<ol>
+<li><p>第一步，可以用到<code>listview</code>的<code>footview</code>，必须在<code>setAdapter</code>之前执行，否则无效。<code>mMoreView</code>相当于是<code>listview</code>新的<code>item</code>，可以是自定义的，如一个简单的<code>textview</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mListView.addFooterView(mMoreView);</div></pre></td></tr></table></figure>
+</li>
+<li><p>第二步，<code>listview</code>需要设置滑动监听，以监听是否滑到listview的底部，如果滑到了底部就要进行新一轮的加载，达到分页效果。<code>onScrollStateChanged</code>是listview正在滑动时会调用的回调方法,<code>scrollState</code>代表当前的滑动的状态，有两个值:</p>
+<ol>
+<li><code>SCROLL_STATE_IDLE</code>表示The view is not scrolling. 停止滑动时。</li>
+<li><code>SCROLL_STATE_TOUCH_SCROLL</code>表示The user is scrolling using touch, and their finger is still on the screen。正在滑动或者还有触点。</li>
+</ol>
+</li>
+</ol>
+<p><code>onScroll</code>会在滑动结束后被调用。<br>判断滑动到最后一项的思路就是判断当前屏幕最后的可见项是否就是<code>footerView</code>，如果是，就说明滑到最后一项数据了，可以进行新一轮的数据请求加载了。这里需要几个索引：</p>
+<ul>
+<li><code>lastVisibleItem</code> 当前屏幕可见的最后一项数据的索引，可以在<code>onScroll</code>通过<code>firstVisibleItem +visibleItemCount -1</code>得到。</li>
+<li><code>lastItemIndex</code> 整个数据集最后一项的索引</li>
+<li><code>loadMoreItemIndex</code> <code>footerView</code>的索引，由于是footerView ，紧跟在整个数据集最后一项，所以它的值是数据集最后一项索引+1<code>(lastItemIndex +1)</code></li>
+</ul>
+<p>在<code>onScrollStateChanged</code>里判断滑动结束(<code>crollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE</code>)且当前可见的最后一项数据的索引与footerView的索引是否相等(<code>loadMoreItemIndex == lastVisibleItem</code>)，如果是，就可以进行异步加载了..<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/07/28/Android-ListView分页加载/#more" rel="contents">
               阅读全文 &raquo;

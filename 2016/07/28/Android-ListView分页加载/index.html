@@ -91,17 +91,23 @@
 
 
 
-<meta name="description" content="由于服务器端返回的数据量可能很大，Android客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以listview作为载体显示，当将listview下滑到底的时候自动发起新的请求，再加载新的数据。">
+<meta name="description" content="由于服务器端返回的数据量可能很大，Android客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以listview作为载体显示，当将listview下滑到底的时候自动发起新的请求，再加载新的数据。
+
+第一步，可以用到listview的footview，必须在setAdapter之前执行，否则无效。mMoreView相当于是listview新的it">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android ListView分页加载">
 <meta property="og:url" content="http://www.qtking.com/2016/07/28/Android-ListView分页加载/index.html">
 <meta property="og:site_name" content="QTK电子竞技俱乐部">
-<meta property="og:description" content="由于服务器端返回的数据量可能很大，Android客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以listview作为载体显示，当将listview下滑到底的时候自动发起新的请求，再加载新的数据。">
+<meta property="og:description" content="由于服务器端返回的数据量可能很大，Android客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以listview作为载体显示，当将listview下滑到底的时候自动发起新的请求，再加载新的数据。
+
+第一步，可以用到listview的footview，必须在setAdapter之前执行，否则无效。mMoreView相当于是listview新的it">
 <meta property="og:image" content="http://oahm7k5gl.bkt.clouddn.com/blog_page.png">
-<meta property="og:updated_time" content="2016-07-28T01:37:00.239Z">
+<meta property="og:updated_time" content="2016-07-28T01:52:29.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android ListView分页加载">
-<meta name="twitter:description" content="由于服务器端返回的数据量可能很大，Android客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以listview作为载体显示，当将listview下滑到底的时候自动发起新的请求，再加载新的数据。">
+<meta name="twitter:description" content="由于服务器端返回的数据量可能很大，Android客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以listview作为载体显示，当将listview下滑到底的时候自动发起新的请求，再加载新的数据。
+
+第一步，可以用到listview的footview，必须在setAdapter之前执行，否则无效。mMoreView相当于是listview新的it">
 <meta name="twitter:image" content="http://oahm7k5gl.bkt.clouddn.com/blog_page.png">
 
 
@@ -381,7 +387,6 @@
 
       
         <p>由于服务器端返回的数据量可能很大，<code>Android</code>客户端不可能一次性请求所有的数据，所以得引入分页的概念，也就是说分批请求数据，每次返回一定量的数据，以<code>listview</code>作为载体显示，当将<code>listview</code>下滑到底的时候自动发起新的请求，再加载新的数据。</p>
-<a id="more"></a>
 <ol>
 <li><p>第一步，可以用到<code>listview</code>的<code>footview</code>，必须在<code>setAdapter</code>之前执行，否则无效。<code>mMoreView</code>相当于是<code>listview</code>新的<code>item</code>，可以是自定义的，如一个简单的<code>textview</code>。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mListView.addFooterView(mMoreView);</div></pre></td></tr></table></figure>
@@ -399,7 +404,7 @@
 <li><code>lastItemIndex</code> 整个数据集最后一项的索引</li>
 <li><code>loadMoreItemIndex</code> <code>footerView</code>的索引，由于是footerView ，紧跟在整个数据集最后一项，所以它的值是数据集最后一项索引+1<code>(lastItemIndex +1)</code></li>
 </ul>
-<p>在<code>onScrollStateChanged</code>里判断滑动结束(<code>crollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE</code>)且当前可见的最后一项数据的索引与footerView的索引是否相等(<code>loadMoreItemIndex == lastVisibleItem</code>)，如果是，就可以进行异步加载了..<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">int</span> lastVisibleItem = <span class="number">0</span>;<span class="comment">//最后一个可见item索引</span></div><div class="line"><span class="keyword">int</span> lastItemIndex = mBlogInfoAdapter.getCount() - <span class="number">1</span>;<span class="comment">//listview数据集最后一个item的索引</span></div><div class="line"><span class="keyword">int</span> loadMoreItemIndex = lastItemIndex + <span class="number">1</span>;<span class="comment">//footerView索引</span></div><div class="line"></div><div class="line">mListView.setOnScrollListener(<span class="keyword">new</span> AbsListView.OnScrollListener() &#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrollStateChanged</span><span class="params">(AbsListView view, <span class="keyword">int</span> scrollState)</span> </span>&#123;</div><div class="line">	    <span class="keyword">if</span> (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE &amp;&amp; loadMoreItemIndex == lastVisibleItem) &#123;</div><div class="line">	        <span class="comment">//不再滑动并且footerView与最后一个可见item索引一致时</span></div><div class="line">	            Log.i(TAG, <span class="string">"onScrollStateChanged: load more..."</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScroll</span><span class="params">(AbsListView view, <span class="keyword">int</span> firstVisibleItem, <span class="keyword">int</span> visibleItemCount, <span class="keyword">int</span> totalItemCount)</span> </span>&#123;</div><div class="line">	    lastVisibleItem = firstVisibleItem + visibleItemCount - <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">        </div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>在<code>onScrollStateChanged</code>里判断滑动结束(<code>crollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE</code>)且当前可见的最后一项数据的索引与footerView的索引是否相等(<code>loadMoreItemIndex == lastVisibleItem</code>)，如果是，就可以进行异步加载了..<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">int</span> lastVisibleItem = <span class="number">0</span>;<span class="comment">//最后一个可见item索引</span></div><div class="line"><span class="keyword">int</span> lastItemIndex = mBlogInfoAdapter.getCount() - <span class="number">1</span>;<span class="comment">//listview数据集最后一个item的索引</span></div><div class="line"><span class="keyword">int</span> loadMoreItemIndex = lastItemIndex + <span class="number">1</span>;<span class="comment">//footerView索引</span></div><div class="line"></div><div class="line">mListView.setOnScrollListener(<span class="keyword">new</span> AbsListView.OnScrollListener() &#123;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrollStateChanged</span><span class="params">(AbsListView view, <span class="keyword">int</span> scrollState)</span> </span>&#123;</div><div class="line">	    <span class="keyword">if</span> (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE &amp;&amp; loadMoreItemIndex == lastVisibleItem) &#123;</div><div class="line">	        <span class="comment">//不再滑动并且footerView与最后一个可见item索引一致时</span></div><div class="line">	            Log.i(TAG, <span class="string">"onScrollStateChanged: load more..."</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScroll</span><span class="params">(AbsListView view, <span class="keyword">int</span> firstVisibleItem, <span class="keyword">int</span> visibleItemCount, <span class="keyword">int</span> totalItemCount)</span> </span>&#123;</div><div class="line">	    lastVisibleItem = firstVisibleItem + visibleItemCount - <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">        </div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 <p><img src="http://oahm7k5gl.bkt.clouddn.com/blog_page.png" alt="实例"></p>
 
       
