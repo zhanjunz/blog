@@ -324,6 +324,145 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/16/Android视频图片缩略图/" itemprop="url">
+                  Android视频图片缩略图
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-16T14:41:02+08:00" content="2016-08-16">
+              2016-08-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/16/Android视频图片缩略图/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/16/Android视频图片缩略图/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/08/16/Android视频图片缩略图/" class="leancloud_visitors" data-flag-title="Android视频图片缩略图">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>android.media.ThumbnailUtils是系统内置的一个生成缩略图的工具类，有三个静态方法可以直接获取系统上的图片和视频的缩略图。</p>
+<blockquote>
+<ul>
+<li>static Bitmap    createVideoThumbnail(String filePath, int kind) Create a video thumbnail for a video.</li>
+<li>static BitmapextractThumbnail(Bitmap source, int width, int height, int options) Creates a centered bitmap of the desired size.</li>
+<li>static BitmapextractThumbnail(Bitmap source, int width, int height) Creates a centered bitmap of the desired size.</li>
+</ul>
+</blockquote>
+<p>获取图像缩略图，这里配合使用BitmapFactory.Options压缩图像大小，并设置inPreferredConfig，以更节省内存的16位图的方式存储像素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> Bitmap <span class="title">getImageThumbnail</span><span class="params">(String uri, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</div><div class="line">	Bitmap bitmap = <span class="keyword">null</span>;</div><div class="line">	BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</div><div class="line">	<span class="comment">// 不去真的解析图片，只是获取图片的头部信息，包含宽高等；</span></div><div class="line">	options.inJustDecodeBounds = <span class="keyword">true</span>;</div><div class="line">	bitmap = BitmapFactory.decodeFile(uri, options);</div><div class="line">     <span class="comment">// 设置好缩放比例后，加载图片进内容；  </span></div><div class="line">	options.inJustDecodeBounds = <span class="keyword">false</span>;</div><div class="line">	<span class="comment">// 得到图片的宽度、高度；</span></div><div class="line">	<span class="keyword">int</span> beWidth = options.outWidth / width;</div><div class="line">	<span class="keyword">int</span> beHeight = options.outHeight / height;</div><div class="line">	<span class="keyword">int</span> be = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span> (beWidth &lt; beHeight) &#123;</div><div class="line">		be = beWidth;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		be = beHeight;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (be &lt;= <span class="number">0</span>) &#123;</div><div class="line">		be = <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="comment">/** If set to a value &gt; 1, requests the decoder to subsample the original image, returning a smaller image to save memory.</span></div><div class="line">	   inSampleSize == 4 returns an image that is 1/4 the width/height of the original, </div><div class="line">	   and 1/16 the number of pixels. Any value &lt;= 1 is treated the same as 1. </div><div class="line">	   Note: the decoder uses a final value based on powers of 2, any other value will be rounded down to the nearest power of 2.*/</div><div class="line">	options.inSampleSize = be;</div><div class="line">	<span class="comment">//选择16位图进行存储，更节省内存，默认值是32位图ARGB_8888</span></div><div class="line">	options.inPreferredConfig = Bitmap.Config.RGB_565;</div><div class="line">	bitmap = BitmapFactory.decodeFile(uri, options);</div><div class="line">	bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,</div><div class="line">			ThumbnailUtils.OPTIONS_RECYCLE_INPUT);<span class="comment">//OPTIONS_RECYCLE_INPUT 回收资源</span></div><div class="line">	<span class="keyword">return</span> bitmap;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>获取视频缩略图，参照MediaStore.Image.Thumbnails类中的常量MINI_KIND和MICRO_KIND。 其中，MINI_KIND: 512 x 384，MICRO_KIND: 96 x 96 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> Bitmap <span class="title">getVideoThumbnail</span><span class="params">(String uri, <span class="keyword">int</span> width, <span class="keyword">int</span> height, <span class="keyword">int</span> kind)</span> </span>&#123;</div><div class="line">	Bitmap bitmap = <span class="keyword">null</span>;</div><div class="line">	bitmap = ThumbnailUtils.createVideoThumbnail(uri, kind);<span class="comment">//MediaStore.Images.Thumbnails.MICRO_KIND</span></div><div class="line">	bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,</div><div class="line">			ThumbnailUtils.OPTIONS_RECYCLE_INPUT);</div><div class="line">	<span class="keyword">return</span> bitmap;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/28/Android-ListView分页加载/" itemprop="url">
                   Android ListView分页加载
                 </a>
@@ -864,147 +1003,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/13/QTK团队/" itemprop="url">
-                  QTK战队简介
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-13T11:33:25+08:00" content="2016-07-13">
-              2016-07-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/QTK/" itemprop="url" rel="index">
-                    <span itemprop="name">QTK</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/13/QTK团队/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/13/QTK团队/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/07/13/QTK团队/" class="leancloud_visitors" data-flag-title="QTK战队简介">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <center>特立独行？<br>循规蹈矩？<br>你我的QTK！<br>什么是QTK?<br><br>QTK是Qing Tong King的缩写，字面意思青铜王者，是自嘲也是勉励，寓<br>意着从青铜开始，向王者进发。</center>
-
-
-
-<p> <img src="http://oahm7k5gl.bkt.clouddn.com/Yyh5W.jpg" alt="QTK战队2010年户外拉练"></p>
-<p>从左至右：</p>
-<ul>
-<li>QTK战队创始人</li>
-<li>QTK_NiMei(国服卡拉曼达ID: 叫你家属收尸)</li>
-<li>QTK_ZhuMei(国服卡拉曼达ID: 独孤求败大大神)</li>
-</ul>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/13/QTK团队/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1050,7 +1048,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
